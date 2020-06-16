@@ -43,7 +43,8 @@ def parse(argv):
       raise argparse.ArgumentTypeError(f"{s} is not a positive integer")
     return v
 
-  parser = argparse.ArgumentParser(allow_abbrev=False)
+  parser = argparse.ArgumentParser(allow_abbrev=False,
+                                   usage="%(prog)s [options] ...")
   commp = parser.add_argument_group("sub-command arguments")
   metap = parser.add_argument_group("meta arguments")
 
@@ -53,7 +54,6 @@ def parse(argv):
   commp.add_argument("-c", "--bytes", metavar="K", dest="kbytes",
                      type=positive_int, default=None,
                      help="skip the first K bytes")
-  commp.add_argument("remainder", nargs=argparse.REMAINDER)
 
   metap.add_argument("--sub-command", metavar="CMD", dest="command",
                      default="tail",
@@ -65,7 +65,8 @@ def parse(argv):
                      action="store_true", default=False,
                      help="just show arguments without execution")
 
-  return parser.parse_args(argv)
+  return parser.parse_known_args(argv)
 
 if __name__ == "__main__":
-  sys.exit(main(**vars(parse(sys.argv[1:]))))
+  args, remainder = parse(sys.argv[1:])
+  sys.exit(main(**vars(args), remainder=remainder))
