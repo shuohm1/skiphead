@@ -10,6 +10,9 @@ import os.path
 import subprocess
 import sys
 
+# TODO: interrupt handling
+# TODO: support short options without a space; like "-n10"
+
 def main(command="tail", ignore_fds=False, just_show=False,
          klines=1, kbytes=None, remainder=tuple()):
   args = [command]
