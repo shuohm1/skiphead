@@ -10,7 +10,7 @@ import os.path
 import subprocess
 import sys
 
-def main(command="tail", ignore_fd=False, dryrun=False,
+def main(command="tail", ignore_fds=False, just_show=False,
          klines=1, kbytes=None, remainder=tuple()):
   args = [command]
   if kbytes is not None:
@@ -19,7 +19,7 @@ def main(command="tail", ignore_fd=False, dryrun=False,
     args += ["--lines", f"+{klines + 1}"]
   args += list(remainder)
 
-  if dryrun:
+  if just_show:
     print(" ".join(args))
     return 0
 
@@ -29,7 +29,7 @@ def main(command="tail", ignore_fd=False, dryrun=False,
     my_stdin = sys.stdin
 
   my_fds = tuple()
-  if not ignore_fd:
+  if not ignore_fds:
     # check file descriptors
     fdpaths = glob.glob("/proc/self/fd/*")
     my_fds = tuple(int(os.path.basename(path)) for path in fdpaths)
@@ -58,10 +58,10 @@ def parse(argv):
   metap.add_argument("--sub-command", metavar="CMD", dest="command",
                      default="tail",
                      help="specify a sub-command instead of \"%(default)s\"")
-  metap.add_argument("--ignore-fd", dest="ignore_fd",
+  metap.add_argument("--ignore-fds", dest="ignore_fds",
                      action="store_true", default=False,
                      help="do not check and pass file descriptors")
-  metap.add_argument("--show", "--dryrun", "--dry-run", dest="dryrun",
+  metap.add_argument("--show", dest="just_show",
                      action="store_true", default=False,
                      help="just show arguments without execution")
 
