@@ -48,25 +48,25 @@ def parse_argv():
 
   parser = argparse.ArgumentParser(allow_abbrev=False,
                                    usage="%(prog)s [options] ...")
-  commp = parser.add_argument_group("skip options")
-  metap = parser.add_argument_group("meta options")
+  skip_opts = parser.add_argument_group("skip options")
+  meta_opts = parser.add_argument_group("meta options")
 
-  commp.add_argument("-n", "--lines", metavar="K", dest="klines",
-                     type=positive_int, default=DEFKLINES,
-                     help="skip the first K lines (default: %(default)s)")
-  commp.add_argument("-c", "--bytes", metavar="K", dest="kbytes",
-                     type=positive_int, default=None,
-                     help="skip the first K bytes")
+  skip_opts.add_argument("-n", "--lines", metavar="K", dest="klines",
+                         type=positive_int, default=DEFKLINES,
+                         help="skip the first K lines (default: %(default)s)")
+  skip_opts.add_argument("-c", "--bytes", metavar="K", dest="kbytes",
+                         type=positive_int, default=None,
+                         help="skip the first K bytes")
 
-  metap.add_argument("--command", metavar="CMD", dest="command",
-                     default=DEFCOMMAND,
-                     help="specify a command instead of \"%(default)s\"")
-  metap.add_argument("--ignore-fds", dest="ignore_fds",
-                     action="store_true", default=False,
-                     help="do not check and pass file descriptors")
-  metap.add_argument("--show", dest="just_show",
-                     action="store_true", default=False,
-                     help="just show arguments without execution")
+  meta_opts.add_argument("--command", metavar="CMD", dest="command",
+                         default=DEFCOMMAND,
+                         help="specify a command instead of \"%(default)s\"")
+  meta_opts.add_argument("--ignore-fds", dest="ignore_fds",
+                         action="store_true", default=False,
+                         help="do not check and pass file descriptors")
+  meta_opts.add_argument("--show", dest="just_show",
+                         action="store_true", default=False,
+                         help="just show arguments without execution")
 
   args, temp = parser.parse_known_args()
 
