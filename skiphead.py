@@ -68,8 +68,9 @@ def parse_argv():
                      action="store_true", default=False,
                      help="just show arguments without execution")
 
-  return parser.parse_known_args()
+  args, remainder = parser.parse_known_args()
+  args.remainder = remainder
+  return args
 
 if __name__ == "__main__":
-  args, remainder = parse_argv()
-  sys.exit(main(**vars(args), remainder=remainder))
+  sys.exit(main(**vars(parse_argv())))
