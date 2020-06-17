@@ -69,7 +69,7 @@ def parse_argv():
                      help="just show arguments without execution")
 
   args, remainder = parser.parse_known_args()
-  args.remainder = remainder
+  args.remainder = tuple(remainder)
   return args
 
 if __name__ == "__main__":
