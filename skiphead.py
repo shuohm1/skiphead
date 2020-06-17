@@ -39,7 +39,7 @@ def main(command="tail", ignore_fds=False, just_show=False,
 
   return subprocess.run(args, stdin=my_stdin, pass_fds=my_fds).returncode
 
-def parse():
+def parse_argv():
   def positive_int(s):
     v = int(s)
     if v <= 0:
@@ -71,5 +71,5 @@ def parse():
   return parser.parse_known_args()
 
 if __name__ == "__main__":
-  args, remainder = parse()
+  args, remainder = parse_argv()
   sys.exit(main(**vars(args), remainder=remainder))
