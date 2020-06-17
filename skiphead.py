@@ -11,9 +11,9 @@ import subprocess
 import sys
 
 DEFKLINES = 1
-DEFSUBCMD = "tail"
+DEFCOMMAND = "tail"
 
-def main(command=DEFSUBCMD, ignore_fds=False, just_show=False,
+def main(command=DEFCOMMAND, ignore_fds=False, just_show=False,
          klines=DEFKLINES, kbytes=None, remainder=tuple()):
   args = [command]
   if kbytes is not None:
@@ -48,8 +48,8 @@ def parse_argv():
 
   parser = argparse.ArgumentParser(allow_abbrev=False,
                                    usage="%(prog)s [options] ...")
-  commp = parser.add_argument_group("sub-command arguments")
-  metap = parser.add_argument_group("meta arguments")
+  commp = parser.add_argument_group("skip options")
+  metap = parser.add_argument_group("meta options")
 
   commp.add_argument("-n", "--lines", metavar="K", dest="klines",
                      type=positive_int, default=DEFKLINES,
@@ -58,9 +58,9 @@ def parse_argv():
                      type=positive_int, default=None,
                      help="skip the first K bytes")
 
-  metap.add_argument("--sub-command", metavar="CMD", dest="command",
-                     default=DEFSUBCMD,
-                     help="specify a sub-command instead of \"%(default)s\"")
+  metap.add_argument("--command", metavar="CMD", dest="command",
+                     default=DEFCOMMAND,
+                     help="specify a command instead of \"%(default)s\"")
   metap.add_argument("--ignore-fds", dest="ignore_fds",
                      action="store_true", default=False,
                      help="do not check and pass file descriptors")
