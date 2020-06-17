@@ -11,7 +11,6 @@ import subprocess
 import sys
 
 # TODO: interrupt handling
-# TODO: support short options without a space; like "-n10"
 
 def main(command="tail", ignore_fds=False, just_show=False,
          klines=1, kbytes=None, remainder=tuple()):
@@ -68,7 +67,36 @@ def parse_argv():
                      action="store_true", default=False,
                      help="just show arguments without execution")
 
-  args, remainder = parser.parse_known_args()
+  args, temp = parser.parse_known_args()
+
+  # check for -nK/-cK
+  remainder = []
+  for rem in temp:
+    if rem.startswith("-n") and rem[2:].isdecimal():
+      new_klines = positive_int(rem[2:])
+      if args.klines != 1:
+        msg = (f"{parser.prog}: warning: "
+               f"-n/--lines={args.klines} is overwritten "
+               f"by -n/--lines={new_klines}")
+        print(msg, file=sys.stderr)
+      args.klines = new_klines
+    elif rem.startswith("-c") and rem[2:].isdecimal():
+      new_kbytes = positive_int(rem[2:])
+      if args.kbytes is not None:
+        msg = (f"{parser.prog}: warning: "
+               f"-c/--bytes={args.kbytes} is overwritten "
+               f"by -c/--bytes={new_kbytes}")
+        print(msg, file=sys.stderr)
+      args.kbytes = new_kbytes
+    else:
+      if rem.startswith("-n") or rem.startswith("-c"):
+        # -n[^0-9]+ or -c[^0-9]+
+        msg = (f"{parser.prog}: warning: "
+               f"unrecognized short option: {rem}, "
+               f"it is passed to \"{args.command}\" as it is")
+        print(msg, file=sys.stderr)
+      remainder.append(rem)
+
   args.remainder = tuple(remainder)
   return args
 
