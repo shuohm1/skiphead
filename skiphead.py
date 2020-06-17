@@ -43,7 +43,7 @@ def parse_argv():
   def positive_int(s):
     v = int(s)
     if v <= 0:
-      raise argparse.ArgumentTypeError(f"{s} is not a positive integer")
+      raise argparse.ArgumentTypeError(f"not a positive integer: {s}")
     return v
 
   parser = argparse.ArgumentParser(allow_abbrev=False,
