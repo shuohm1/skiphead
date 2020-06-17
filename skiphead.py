@@ -10,8 +10,6 @@ import os.path
 import subprocess
 import sys
 
-# TODO: interrupt handling
-
 def main(command="tail", ignore_fds=False, just_show=False,
          klines=1, kbytes=None, remainder=tuple()):
   args = [command]
@@ -101,4 +99,8 @@ def parse_argv():
   return args
 
 if __name__ == "__main__":
-  sys.exit(main(**vars(parse_argv())))
+  try:
+    sys.exit(main(**vars(parse_argv())))
+  except KeyboardInterrupt:
+    print(file=sys.stderr)
+    sys.exit(1)
