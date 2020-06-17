@@ -40,6 +40,7 @@ def main(command=DEFCOMMAND, ignore_fds=False, just_show=False,
   return subprocess.run(args, stdin=my_stdin, pass_fds=my_fds).returncode
 
 def parse_argv():
+  # TODO: support a value with a plus sign (?)
   def positive_int(s):
     v = int(s)
     if v <= 0:
