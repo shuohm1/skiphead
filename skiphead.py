@@ -10,8 +10,11 @@ import os.path
 import subprocess
 import sys
 
-def main(command="tail", ignore_fds=False, just_show=False,
-         klines=1, kbytes=None, remainder=tuple()):
+DEFKLINES = 1
+DEFSUBCMD = "tail"
+
+def main(command=DEFSUBCMD, ignore_fds=False, just_show=False,
+         klines=DEFKLINES, kbytes=None, remainder=tuple()):
   args = [command]
   if kbytes is not None:
     args += ["--bytes", f"+{kbytes + 1}"]
@@ -49,14 +52,14 @@ def parse_argv():
   metap = parser.add_argument_group("meta arguments")
 
   commp.add_argument("-n", "--lines", metavar="K", dest="klines",
-                     type=positive_int, default=1,
+                     type=positive_int, default=DEFKLINES,
                      help="skip the first K lines (default: %(default)s)")
   commp.add_argument("-c", "--bytes", metavar="K", dest="kbytes",
                      type=positive_int, default=None,
                      help="skip the first K bytes")
 
   metap.add_argument("--sub-command", metavar="CMD", dest="command",
-                     default="tail",
+                     default=DEFSUBCMD,
                      help="specify a sub-command instead of \"%(default)s\"")
   metap.add_argument("--ignore-fds", dest="ignore_fds",
                      action="store_true", default=False,
@@ -72,7 +75,7 @@ def parse_argv():
   for rem in temp:
     if rem.startswith("-n") and rem[2:].isdecimal():
       new_klines = positive_int(rem[2:])
-      if args.klines != 1:
+      if args.klines != DEFKLINES:
         msg = (f"{parser.prog}: warning: "
                f"-n/--lines={args.klines} is overwritten "
                f"by -n/--lines={new_klines}")
